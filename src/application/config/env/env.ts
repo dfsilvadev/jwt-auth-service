@@ -5,6 +5,10 @@ import { AppError } from "../../errors/app-error";
 
 import { logger } from "../../../infra/logger";
 
+const SECONDS_IN_MINUTE = 60;
+const MINUTES_TO_CONVERT = 15;
+const SALT_ROUNDS = 10;
+
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   NODE_ENV: z.enum(["development", "test", "production"]).default("production"),
@@ -15,7 +19,12 @@ const envSchema = z.object({
       (secret) => secret !== "your-secret-here" && secret !== "change-me",
       "JWT_SECRET cannot be a placeholder value"
     ),
-  PASSWORD_SALT_ROUNDS: z.coerce.number().min(4).max(15).default(10),
+  JWT_ISSUER: z.string().default("auth-jwt"),
+  ACCESS_TOKEN_TTL: z.coerce
+    .number()
+    .min(SECONDS_IN_MINUTE, "ACCESS_TOKEN_TTL must be at least 60 seconds")
+    .default(MINUTES_TO_CONVERT * SECONDS_IN_MINUTE), // 15 minutes
+  PASSWORD_SALT_ROUNDS: z.coerce.number().min(4).max(15).default(SALT_ROUNDS),
   DATABASE_URL: z
     .string()
     .url("DATABASE_URL must be a valid PostgreSQL connection string")
