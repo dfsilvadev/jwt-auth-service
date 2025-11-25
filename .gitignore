@@ -142,3 +142,6 @@ src/database/tmp/*.sqlite
 src/database/tmp/*.db
 /src/generated/prisma
 .pnpm-store
+
+# Prisma
+prisma/migrations
