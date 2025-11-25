@@ -140,8 +140,8 @@ build
 # Database
 src/database/tmp/*.sqlite
 src/database/tmp/*.db
-/src/generated/prisma
 .pnpm-store
+.vscode
 
 # Prisma
-prisma/migrations
+/src/generated
