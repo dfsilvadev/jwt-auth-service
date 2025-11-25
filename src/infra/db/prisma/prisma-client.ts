@@ -1,5 +1,5 @@
 import { env } from "../../../application/config/env/env";
-import { PrismaClient } from "../../../generated/prisma";
+import { PrismaClient } from "../../../generated";
 import { logger } from "../../logger";
 
 /**
