@@ -1,4 +1,7 @@
 import { AccountRepository } from "../../../core/repositories/account.repository";
+
+import { PasswordHasher } from "../../../infra/security";
+
 import { AccountAlreadyExistsError } from "../../errors/account-already-exists-error";
 
 interface SignUpUseCaseRequest {
@@ -10,7 +13,10 @@ interface SignUpUseCaseRequest {
 type SignUpUseCaseResponse = void;
 
 export class SignUpUseCase {
-  constructor(private readonly _accountRepository: AccountRepository) {}
+  constructor(
+    private readonly _accountRepository: AccountRepository,
+    private readonly _passwordHasher: PasswordHasher
+  ) {}
 
   async execute({
     name,
@@ -22,6 +28,12 @@ export class SignUpUseCase {
 
     if (accountAlreadyExists) throw new AccountAlreadyExistsError(email);
 
-    await this._accountRepository.create({ name, email, password });
+    const hashedPassword = await this._passwordHasher.hash(password);
+
+    await this._accountRepository.create({
+      name,
+      email,
+      password: hashedPassword
+    });
   }
 }

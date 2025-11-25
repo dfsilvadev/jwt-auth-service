@@ -36,7 +36,7 @@ export class AccountRepository {
       data: {
         name,
         email,
-        password
+        passwordHash: password
       }
     });
 
