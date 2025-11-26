@@ -40,13 +40,8 @@ export const ERROR_CODES = {
   ACCOUNT_SUSPENDED: "ACCOUNT_SUSPENDED",
   ACCOUNT_DELETED: "ACCOUNT_DELETED",
 
-  // Organization Status (403, 404)
-  ORGANIZATION_NOT_ACTIVE: "ORGANIZATION_NOT_ACTIVE",
-  ORGANIZATION_NOT_FOUND: "ORGANIZATION_NOT_FOUND",
-
   // Conflicts (409)
   ACCOUNT_EXISTS: "ACCOUNT_EXISTS",
-  ORGANIZATION_EXISTS: "ORGANIZATION_EXISTS",
 
   // Generic (500)
   INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR"
@@ -88,17 +83,9 @@ export const ERROR_MESSAGES = {
   ACCOUNT_DELETED:
     "This account is no longer available. If you believe this is an error, please contact support",
 
-  // Organization Status (403, 404)
-  ORGANIZATION_NOT_ACTIVE:
-    "This organization is currently inactive. Please contact your administrator",
-  ORGANIZATION_NOT_FOUND:
-    "The requested organization could not be found. Please verify the information and try again",
-
   // Conflicts (409)
   ACCOUNT_EXISTS:
     "An account with this email address already exists. Please use a different email or try logging in",
-  ORGANIZATION_EXISTS:
-    "An organization with this document number already exists. Please verify your information",
 
   // Generic (500)
   INTERNAL_SERVER_ERROR:

@@ -1,11 +1,11 @@
 import { randomUUID } from "node:crypto";
 
-import { AccountRepository } from "../../../core/repositories/account.repository";
+import { AccountRepository } from "../../../core/repositories/account-repository";
 
 import { PasswordHasher } from "../../../infra/security";
 import { TokenService } from "../../services/auth/token-service";
 
-import { InvalidCredentialsError } from "../../errors/invalid-credentials-error";
+import { InvalidCredentialsError } from "../../http/exceptions/invalid-credentials-error";
 
 interface SignInUseCaseRequest {
   readonly email: string;

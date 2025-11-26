@@ -1,14 +1,12 @@
-import { AccountRepository } from "../../../core/repositories/account.repository";
+import { AccountRepository } from "../../../core/repositories/account-repository";
 
 import { PasswordHasher } from "../../../infra/security";
 
-import { AccountAlreadyExistsError } from "../../errors/account-already-exists-error";
+import { AccountAlreadyExistsError } from "../../http/exceptions/account-already-exists-error";
 
-interface SignUpUseCaseRequest {
-  readonly name: string;
-  readonly email: string;
-  readonly password: string;
-}
+import { type SignUpSchema } from "../../http/schema/sign-up";
+
+type SignUpUseCaseRequest = SignUpSchema;
 
 type SignUpUseCaseResponse = void;
 

@@ -7,9 +7,9 @@ import {
   HTTP_STATUS
 } from "../constants/error-messages";
 
-import { IResponse } from "../../interfaces/controller";
+import { type HttpResponse } from "../../../../core/entities/response";
 
-export function toHttpResponse(error: unknown): IResponse {
+export function toHttpResponse(error: unknown): HttpResponse {
   if (error instanceof ZodError) {
     return {
       statusCode: HTTP_STATUS.BAD_REQUEST,
