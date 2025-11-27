@@ -39,10 +39,17 @@ class PrismaClientSingleton {
         logger.error("[Prisma] Database error:", e);
       });
 
-      process.on("beforeExit", async () => {
-        await this.instance?.$disconnect();
-        logger.info("[Prisma] Disconnected from database");
-      });
+      // Registra handlers para encerramento gracioso
+      const gracefulShutdown = async (signal: string) => {
+        logger.info(
+          `[Prisma] Received ${signal}, disconnecting from database...`
+        );
+        await PrismaClientSingleton.disconnect();
+        process.exit(0);
+      };
+
+      process.once("SIGINT", () => gracefulShutdown("SIGINT"));
+      process.once("SIGTERM", () => gracefulShutdown("SIGTERM"));
     }
 
     return this.instance;

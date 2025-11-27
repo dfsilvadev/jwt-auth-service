@@ -10,7 +10,6 @@ import { type HttpResponse } from "../../../../core/entities/response";
 export class HealthCheckController implements Controller {
   async handle(_request: HttpRequest): Promise<HttpResponse> {
     try {
-      // Verifica conexão com o banco de dados
       await prismaClient.$queryRaw`SELECT 1`;
 
       return {
@@ -25,7 +24,7 @@ export class HealthCheckController implements Controller {
       logger.error("[Health Check] Database connection failed:", error);
 
       return {
-        statusCode: 503, // Service Unavailable
+        statusCode: 503,
         body: {
           status: "unhealthy",
           timestamp: new Date().toISOString(),
