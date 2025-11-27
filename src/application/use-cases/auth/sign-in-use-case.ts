@@ -7,10 +7,9 @@ import { TokenService } from "../../services/auth/token-service";
 
 import { InvalidCredentialsError } from "../../http/exceptions/invalid-credentials-error";
 
-interface SignInUseCaseRequest {
-  readonly email: string;
-  readonly password: string;
-}
+import { type SignInSchema } from "../../http/schema/sign-in";
+
+type SignInUseCaseRequest = SignInSchema;
 
 interface SignInUseCaseResponse {
   readonly accessToken: string;
