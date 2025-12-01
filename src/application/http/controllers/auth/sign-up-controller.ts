@@ -9,9 +9,9 @@ import {
   SUCCESS_CODES
 } from "../../utils/constants/success-messages";
 
-import { type Controller } from "../../../../domain/entities/controller";
-import { type HttpRequest } from "../../../../domain/entities/request";
-import { type HttpResponse } from "../../../../domain/entities/response";
+import type { Controller } from "../../../../domain/entities/controller";
+import type { HttpRequest } from "../../../../domain/entities/request";
+import type { HttpResponse } from "../../../../domain/entities/response";
 
 export class SignUpController implements Controller {
   constructor(private readonly _signUpUseCase: SignUpUseCase) {}

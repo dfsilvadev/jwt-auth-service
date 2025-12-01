@@ -1,6 +1,6 @@
 import { prismaClient } from "../../infra/db/prisma/prisma-client";
 
-import { type Prisma } from "../../generated";
+import type { Prisma } from "../../generated";
 
 interface CreateInput {
   readonly name: string;

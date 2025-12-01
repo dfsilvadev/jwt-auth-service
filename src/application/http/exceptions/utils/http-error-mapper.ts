@@ -7,7 +7,7 @@ import {
   HTTP_STATUS
 } from "../constants/error-messages";
 
-import { type HttpResponse } from "../../../../domain/entities/response";
+import type { HttpResponse } from "../../../../domain/entities/response";
 
 export function toHttpResponse(error: unknown): HttpResponse {
   if (error instanceof ZodError) {
