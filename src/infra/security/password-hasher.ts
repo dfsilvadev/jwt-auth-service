@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 
-import { env } from "../../application/config/env/env";
+import { env } from "../../server/config/env/env";
 import { logger } from "../logger";
 
 export class PasswordHasher {

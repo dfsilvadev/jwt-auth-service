@@ -7,11 +7,11 @@ import { signUpSchema } from "../../schema/sign-up";
 import {
   HTTP_SUCCESS_STATUS,
   SUCCESS_CODES
-} from "../../util/constants/success-messages";
+} from "../../utils/constants/success-messages";
 
-import { type Controller } from "../../../../core/entities/controller";
-import { type HttpRequest } from "../../../../core/entities/request";
-import { type HttpResponse } from "../../../../core/entities/response";
+import { type Controller } from "../../../../domain/entities/controller";
+import { type HttpRequest } from "../../../../domain/entities/request";
+import { type HttpResponse } from "../../../../domain/entities/response";
 
 export class SignUpController implements Controller {
   constructor(private readonly _signUpUseCase: SignUpUseCase) {}

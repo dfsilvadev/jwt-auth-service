@@ -1,4 +1,4 @@
-import { AccountRepository } from "../../../core/repositories/account-repository";
+import { AccountRepository } from "../../../domain/repositories/account-repository";
 
 import { PasswordHasher } from "../../../infra/security";
 

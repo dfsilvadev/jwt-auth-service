@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-import { AccountRepository } from "../../../core/repositories/account-repository";
+import { AccountRepository } from "../../../domain/repositories/account-repository";
 
 import { PasswordHasher } from "../../../infra/security";
 import { TokenService } from "../../services/auth/token-service";

@@ -1,6 +1,6 @@
-import { env } from "../../application/config/env/env";
-
 import { TokenService } from "../../application/services/auth/token-service";
+
+import { env } from "../../server/config/env/env";
 
 export function makeTokenService() {
   const SECRET = env.JWT_SECRET;

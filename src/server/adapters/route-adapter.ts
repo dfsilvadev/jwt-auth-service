@@ -1,6 +1,6 @@
 import { type Request, type Response } from "express";
 
-import { type Controller } from "../../core/entities/controller";
+import { type Controller } from "../../domain/entities/controller";
 
 export function routeAdapter(controller: Controller) {
   return async (req: Request, resp: Response) => {

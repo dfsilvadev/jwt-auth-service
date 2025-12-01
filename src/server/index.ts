@@ -1,11 +1,10 @@
 import express from "express";
 
-import { corsConfig } from "../application/config/cors";
-import { helmetConfig } from "../application/config/helmet";
-
 import router from "../application/http/routes";
 
-import { env } from "../application/config/env/env";
+import { corsConfig } from "./config/cors";
+import { env } from "./config/env/env";
+import { helmetConfig } from "./config/helmet";
 
 const app = express();
 

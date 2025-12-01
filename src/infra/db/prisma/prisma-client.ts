@@ -1,8 +1,8 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 
-import { env } from "../../../application/config/env/env";
 import { PrismaClient } from "../../../generated";
+import { env } from "../../../server/config/env/env";
 import { logger } from "../../logger";
 
 /**
