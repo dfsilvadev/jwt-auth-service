@@ -9,13 +9,22 @@ import type {
   HttpControllerRequest,
   HttpResponse
 } from "../../../../domain/entities/httpProtocol.interface";
+import type { AccountStatus } from "../../../../generated";
+
+interface ListAccountsQuery {
+  status?: AccountStatus;
+}
 
 export class ListAccountsController implements Controller {
   constructor(private readonly _listAccountsUseCase: ListAccountsUseCase) {}
 
-  async handle(_request: HttpControllerRequest): Promise<HttpResponse> {
+  async handle(
+    _request: HttpControllerRequest<unknown, ListAccountsQuery, unknown>
+  ): Promise<HttpResponse> {
     try {
-      const accounts = await this._listAccountsUseCase.execute();
+      const { status } = _request.query;
+
+      const accounts = await this._listAccountsUseCase.execute({ status });
 
       return {
         statusCode: HTTP_SUCCESS_STATUS.OK,

@@ -1,4 +1,4 @@
-import { Prisma } from "../../generated";
+import { AccountStatus, Prisma } from "../../generated";
 import { prismaClient } from "../../infra/db/prisma/prisma-client";
 
 interface CreateInput {
@@ -8,6 +8,15 @@ interface CreateInput {
 }
 
 export class AccountRepository {
+  private readonly selectAccountFields = {
+    id: true,
+    name: true,
+    email: true,
+    status: true,
+    createdAt: true,
+    updatedAt: true
+  };
+
   async findByEmail(email: string) {
     const foundAccount = await this.findUnique({ email });
 
@@ -20,15 +29,16 @@ export class AccountRepository {
     return foundAccount;
   }
 
-  async list() {
+  async findAll({ status }: { status?: AccountStatus }) {
+    const whereClause: { status?: AccountStatus } = {};
+
+    if (status) {
+      whereClause.status = status;
+    }
+
     const rows = await prismaClient.account.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-        updatedAt: true
-      }
+      where: whereClause,
+      select: this.selectAccountFields
     });
 
     return rows;

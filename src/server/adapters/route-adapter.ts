@@ -6,7 +6,10 @@ export function routeAdapter(controller: Controller) {
   return async (req: Request, resp: Response) => {
     const { statusCode, body } = await controller.handle({
       body: req.body,
-      account: req.metadata?.account
+      params: req.params,
+      query: req.query,
+      metadata: (req as any).metadata,
+      account: (req as any).metadata?.account
     });
 
     resp.status(statusCode).json(body);

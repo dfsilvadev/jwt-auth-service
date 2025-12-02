@@ -1,18 +1,26 @@
-import type { Account } from "./account.interface";
+import type { SessionAccount } from "./account.interface";
 
-export interface HttpControllerRequest {
-  body: Record<string, any>;
-  metadata?: Record<string, any>;
-  params?: Record<string, string>;
-  query?: Record<string, any>;
-  account?: Account;
+export interface HttpControllerRequest<
+  TBody = unknown,
+  TQuery = unknown,
+  TParams = unknown
+> {
+  body: TBody;
+  metadata?: {
+    accountId?: string;
+    sessionId?: string;
+    [key: string]: unknown;
+  };
+  params: TParams;
+  query: TQuery;
+  account?: SessionAccount;
 }
 
 export interface HttpMiddlewareRequest {
   headers: Record<string, string | string[]>;
 }
 
-export interface HttpResponse {
+export interface HttpResponse<TBody = unknown> {
   statusCode: number;
-  body: Record<string, any> | null;
+  body: TBody | null;
 }

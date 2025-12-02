@@ -5,6 +5,9 @@ import { AccountRepository } from "../../../domain/repositories/account-reposito
 import { PasswordHasher } from "../../../infra/security";
 import { TokenService } from "../../services/auth/token-service";
 
+import { AccountDeletedError } from "../../http/exceptions/account-deleted-error";
+import { AccountPendingError } from "../../http/exceptions/account-pending-error";
+import { AccountSuspendedError } from "../../http/exceptions/account-suspended-error";
 import { InvalidCredentialsError } from "../../http/exceptions/invalid-credentials-error";
 
 import type { SignInSchema } from "../../http/schema/sign-in.schema";
@@ -30,6 +33,12 @@ export class SignInUseCase {
     const foundAccount = await this._accountRepository.findByEmail(email);
 
     if (!foundAccount) throw new InvalidCredentialsError();
+
+    if (foundAccount.status === "SUSPENDED") throw new AccountSuspendedError();
+
+    if (foundAccount.status === "PENDING") throw new AccountPendingError();
+
+    if (foundAccount.status === "DELETED") throw new AccountDeletedError();
 
     const isPasswordValid = await this._passwordHasher.compare(
       password,
