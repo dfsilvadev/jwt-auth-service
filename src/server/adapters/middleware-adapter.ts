@@ -14,12 +14,14 @@ export function middlewareAdapter(middleware: Middleware) {
         return response.status(result.statusCode).json(result.body);
       }
 
-      if ("data" in result) {
-        request.body = {
-          ...request.body,
-          ...result.data
-        };
+      if (!request.metadata) {
+        request.metadata = {};
       }
+
+      request.metadata = {
+        ...request.metadata,
+        ...result.data
+      };
 
       next();
     } catch (error) {

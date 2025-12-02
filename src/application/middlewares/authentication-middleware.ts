@@ -24,8 +24,10 @@ export class AuthenticationMiddleware implements Middleware {
 
     return {
       data: {
-        accountId: payload.sub,
-        sessionId: payload.sessionId
+        account: {
+          id: payload.sub,
+          sessionId: payload.sessionId
+        }
       }
     };
   }

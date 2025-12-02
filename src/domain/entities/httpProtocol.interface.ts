@@ -1,5 +1,11 @@
+import type { Account } from "./account.interface";
+
 export interface HttpControllerRequest {
   body: Record<string, any>;
+  metadata?: Record<string, any>;
+  params?: Record<string, string>;
+  query?: Record<string, any>;
+  account?: Account;
 }
 
 export interface HttpMiddlewareRequest {
