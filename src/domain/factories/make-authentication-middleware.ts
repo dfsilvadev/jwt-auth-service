@@ -1,4 +1,4 @@
-import { AuthenticationMiddleware } from "../../application/middlewares/authentication-middleware";
+import { AuthenticationMiddleware } from "../../application/middlewares/authentication.middleware";
 
 import { makeTokenService } from "./make-token-service";
 

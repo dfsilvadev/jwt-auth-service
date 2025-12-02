@@ -1,8 +1,8 @@
-import { SignUpUseCase } from "../../../use-cases/auth/sign-up-use-case";
+import { SignUpUseCase } from "../../../use-cases/auth/sign-up.use-case";
 
 import { toHttpResponse } from "../../exceptions/utils/http-error-mapper";
 
-import { signUpSchema } from "../../schema/sign-up";
+import { signUpSchema } from "../../schema/sign-up.schema";
 
 import {
   HTTP_SUCCESS_STATUS,

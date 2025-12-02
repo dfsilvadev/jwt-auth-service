@@ -1,4 +1,4 @@
-import { SignUpController } from "../../application/http/controllers/auth/sign-up-controller";
+import { SignUpController } from "../../application/http/controllers/auth/sign-up.controller";
 
 import { makeSignUpUseCase } from "./make-sign-up-use-case";
 

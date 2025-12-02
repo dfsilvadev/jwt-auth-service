@@ -4,7 +4,7 @@ import { PasswordHasher } from "../../../infra/security";
 
 import { AccountAlreadyExistsError } from "../../http/exceptions/account-already-exists-error";
 
-import type { SignUpSchema } from "../../http/schema/sign-up";
+import type { SignUpSchema } from "../../http/schema/sign-up.schema";
 
 type SignUpUseCaseRequest = SignUpSchema;
 
