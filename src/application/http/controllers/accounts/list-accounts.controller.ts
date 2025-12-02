@@ -5,6 +5,8 @@ import { ListAccountsUseCase } from "../../../use-cases/accounts/list-accounts.u
 import { toHttpResponse } from "../../exceptions/utils/http-error-mapper";
 import { HTTP_SUCCESS_STATUS } from "../../utils/constants/success-messages";
 
+import { listAccountsSchema } from "../../schema/list-accounts.schema";
+
 import type {
   HttpControllerRequest,
   HttpResponse
@@ -18,11 +20,15 @@ interface ListAccountsQuery {
 export class ListAccountsController implements Controller {
   constructor(private readonly _listAccountsUseCase: ListAccountsUseCase) {}
 
-  async handle(
-    _request: HttpControllerRequest<unknown, ListAccountsQuery, unknown>
-  ): Promise<HttpResponse> {
+  async handle({
+    query
+  }: HttpControllerRequest<
+    unknown,
+    ListAccountsQuery,
+    unknown
+  >): Promise<HttpResponse> {
     try {
-      const { status } = _request.query;
+      const { status } = listAccountsSchema.parse(query);
 
       const accounts = await this._listAccountsUseCase.execute({ status });
 
