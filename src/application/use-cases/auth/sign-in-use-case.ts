@@ -1,13 +1,13 @@
 import { randomUUID } from "node:crypto";
 
-import { AccountRepository } from "../../../core/repositories/account-repository";
+import { AccountRepository } from "../../../domain/repositories/account-repository";
 
 import { PasswordHasher } from "../../../infra/security";
 import { TokenService } from "../../services/auth/token-service";
 
 import { InvalidCredentialsError } from "../../http/exceptions/invalid-credentials-error";
 
-import { type SignInSchema } from "../../http/schema/sign-in";
+import type { SignInSchema } from "../../http/schema/sign-in";
 
 type SignInUseCaseRequest = SignInSchema;
 

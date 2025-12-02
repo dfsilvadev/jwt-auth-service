@@ -7,16 +7,18 @@ import { signUpSchema } from "../../schema/sign-up";
 import {
   HTTP_SUCCESS_STATUS,
   SUCCESS_CODES
-} from "../../util/constants/success-messages";
+} from "../../utils/constants/success-messages";
 
-import { type Controller } from "../../../../core/entities/controller";
-import { type HttpRequest } from "../../../../core/entities/request";
-import { type HttpResponse } from "../../../../core/entities/response";
+import type { Controller } from "../../../../domain/entities/controller.interface";
+import type {
+  HttpControllerRequest,
+  HttpResponse
+} from "../../../../domain/entities/httpProtocol.interface";
 
 export class SignUpController implements Controller {
   constructor(private readonly _signUpUseCase: SignUpUseCase) {}
 
-  async handle({ body }: HttpRequest): Promise<HttpResponse> {
+  async handle({ body }: HttpControllerRequest): Promise<HttpResponse> {
     try {
       const { name, email, password } = signUpSchema.parse(body);
       const account = await this._signUpUseCase.execute({

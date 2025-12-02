@@ -11,7 +11,7 @@
     "target": "ES2020",
 
     // For nodejs:
-    "types": ["node"],
+    "types": ["node", "pg"],
 
     // Recommended Options
     "strict": true,

@@ -1,10 +1,10 @@
-import { AccountRepository } from "../../../core/repositories/account-repository";
+import { AccountRepository } from "../../../domain/repositories/account-repository";
 
 import { PasswordHasher } from "../../../infra/security";
 
 import { AccountAlreadyExistsError } from "../../http/exceptions/account-already-exists-error";
 
-import { type SignUpSchema } from "../../http/schema/sign-up";
+import type { SignUpSchema } from "../../http/schema/sign-up";
 
 type SignUpUseCaseRequest = SignUpSchema;
 

@@ -1,6 +1,5 @@
+import { Prisma } from "../../generated";
 import { prismaClient } from "../../infra/db/prisma/prisma-client";
-
-import { type Prisma } from "../../generated";
 
 interface CreateInput {
   readonly name: string;
@@ -9,12 +8,6 @@ interface CreateInput {
 }
 
 export class AccountRepository {
-  private async findUnique(where: Prisma.AccountWhereUniqueInput) {
-    return await prismaClient.account.findUnique({
-      where
-    });
-  }
-
   async findByEmail(email: string) {
     const foundAccount = await this.findUnique({ email });
 
@@ -27,6 +20,20 @@ export class AccountRepository {
     return foundAccount;
   }
 
+  async list() {
+    const rows = await prismaClient.account.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true
+      }
+    });
+
+    return rows;
+  }
+
   async create({ name, email, password }: CreateInput) {
     const newAccount = await prismaClient.account.create({
       data: {
@@ -37,5 +44,11 @@ export class AccountRepository {
     });
 
     return newAccount;
+  }
+
+  private async findUnique(where: Prisma.AccountWhereUniqueInput) {
+    return await prismaClient.account.findUnique({
+      where
+    });
   }
 }

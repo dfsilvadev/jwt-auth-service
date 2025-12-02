@@ -2,20 +2,22 @@ import { SignInUseCase } from "../../../use-cases/auth/sign-in-use-case";
 
 import { toHttpResponse } from "../../exceptions/utils/http-error-mapper";
 
-import { signUpSchema } from "../../schema/sign-up";
+import { signInSchema } from "../../schema/sign-in";
 
-import { HTTP_SUCCESS_STATUS } from "../../util/constants/success-messages";
+import { HTTP_SUCCESS_STATUS } from "../../utils/constants/success-messages";
 
-import { type Controller } from "../../../../core/entities/controller";
-import { type HttpRequest } from "../../../../core/entities/request";
-import { type HttpResponse } from "../../../../core/entities/response";
+import type { Controller } from "../../../../domain/entities/controller.interface";
+import type {
+  HttpControllerRequest,
+  HttpResponse
+} from "../../../../domain/entities/httpProtocol.interface";
 
 export class SignInController implements Controller {
   constructor(private readonly _signInUseCase: SignInUseCase) {}
 
-  async handle({ body }: HttpRequest): Promise<HttpResponse> {
+  async handle({ body }: HttpControllerRequest): Promise<HttpResponse> {
     try {
-      const { email, password } = signUpSchema.parse(body);
+      const { email, password } = signInSchema.parse(body);
 
       const { accessToken, expiresIn } = await this._signInUseCase.execute({
         email,

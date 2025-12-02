@@ -1,5 +1,8 @@
-import { env } from "../../../application/config/env/env";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
+
 import { PrismaClient } from "../../../generated";
+import { env } from "../../../server/config/env/env";
 import { logger } from "../../logger";
 
 /**
@@ -8,16 +11,26 @@ import { logger } from "../../logger";
  */
 class PrismaClientSingleton {
   private static instance: PrismaClient | null = null;
+  private static pool: Pool | null = null;
 
   static getInstance(): PrismaClient {
     if (!this.instance) {
-      const clientConfig: {
-        log: ("query" | "error" | "warn")[];
-      } = {
+      // Cria o pool do PostgreSQL
+      if (!this.pool) {
+        this.pool = new Pool({
+          connectionString: env.DATABASE_URL
+        });
+      }
+
+      // Cria o adapter do Prisma
+      const adapter = new PrismaPg(this.pool);
+
+      const clientConfig = {
+        adapter,
         log:
           env.NODE_ENV === "development"
-            ? ["query", "error", "warn"]
-            : ["error"]
+            ? (["query", "error", "warn"] as ("query" | "error" | "warn")[])
+            : (["error"] as "error"[])
       };
 
       this.instance = new PrismaClient(clientConfig);
@@ -26,10 +39,17 @@ class PrismaClientSingleton {
         logger.error("[Prisma] Database error:", e);
       });
 
-      process.on("beforeExit", async () => {
-        await this.instance?.$disconnect();
-        logger.info("[Prisma] Disconnected from database");
-      });
+      // Registra handlers para encerramento gracioso
+      const gracefulShutdown = async (signal: string) => {
+        logger.info(
+          `[Prisma] Received ${signal}, disconnecting from database...`
+        );
+        await PrismaClientSingleton.disconnect();
+        process.exit(0);
+      };
+
+      process.once("SIGINT", () => gracefulShutdown("SIGINT"));
+      process.once("SIGTERM", () => gracefulShutdown("SIGTERM"));
     }
 
     return this.instance;
@@ -40,6 +60,11 @@ class PrismaClientSingleton {
       await this.instance.$disconnect();
       this.instance = null;
       logger.info("[Prisma] Disconnected from database");
+    }
+    if (this.pool) {
+      await this.pool.end();
+      this.pool = null;
+      logger.info("[Prisma] Pool closed");
     }
   }
 }

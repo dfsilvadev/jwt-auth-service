@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { z } from "zod";
 
-import { AppError } from "../../http/exceptions/app-error";
+import { AppError } from "../../../application/http/exceptions/app-error";
 
 import { logger } from "../../../infra/logger";
 
