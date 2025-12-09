@@ -1,9 +1,0 @@
-import { SignUpController } from "../../application/http/controllers/auth/sign-up-controller";
-
-import { makeSignUpUseCase } from "./make-sign-up-use-case";
-
-export function makeSignUpController() {
-  const signUpUseCase = makeSignUpUseCase();
-
-  return new SignUpController(signUpUseCase);
-}

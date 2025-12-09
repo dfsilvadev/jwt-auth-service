@@ -1,8 +1,8 @@
 import type {
-  HttpControllerRequest,
+  HttpRequest,
   HttpResponse
-} from "./httpProtocol.interface";
+} from "../../presentation/http/types/http.types";
 
 export interface Controller {
-  handle(_request: HttpControllerRequest): Promise<HttpResponse>;
+  handle(_request: HttpRequest): Promise<HttpResponse>;
 }
