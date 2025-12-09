@@ -39,7 +39,7 @@ Edite o `.env` com suas configurações:
 PORT=3000
 NODE_ENV=development
 JWT_SECRET=your-super-secret-jwt-key-minimum-32-characters-long
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/auth_jwt?schema=public
+DATABASE_URL=postgresql://postgres:postgres@localhost:5433/jwt-auth-service?schema=public
 ```
 
 ### 3. Iniciar PostgreSQL com Docker
@@ -104,6 +104,167 @@ pnpm start
 - `pnpm format` - Formata código com Prettier
 - `pnpm format:check` - Verifica formatação
 
+## 🏗️ Arquitetura
+
+Este projeto segue os princípios de **Clean Architecture** e **SOLID**, organizando o código em camadas bem definidas:
+
+### 📁 Estrutura do Projeto
+
+```
+src/
+├── domain/                          # 🟢 CAMADA DE DOMÍNIO (Núcleo)
+│   ├── entities/                    # Entidades de domínio
+│   │   ├── account.entity.ts        # Entidade Account
+│   │   └── controller.interface.ts # Interface Controller
+│   ├── repositories/                # Interfaces de repositórios
+│   │   └── account.repository.ts   # Contrato AccountRepository
+│   ├── services/                    # Interfaces de serviços de domínio
+│   │   ├── token.service.ts        # Interface TokenService
+│   │   └── password-hasher.service.ts # Interface PasswordHasher
+│   └── errors/                      # Erros de domínio
+│       ├── domain-error.ts         # Classe base de erros
+│       ├── invalid-credentials.error.ts
+│       └── account-already-exists.error.ts
+│
+├── application/                      # 🟡 CAMADA DE APLICAÇÃO
+│   ├── use-cases/                    # Casos de uso (orquestração)
+│   │   ├── auth/
+│   │   │   ├── sign-in.use-case.ts
+│   │   │   └── sign-up.use-case.ts
+│   │   └── accounts/
+│   │       └── list-accounts.use-case.ts
+│   └── dtos/                         # Data Transfer Objects
+│       ├── auth/
+│       │   ├── sign-in.dto.ts
+│       │   └── sign-up.dto.ts
+│       └── accounts/
+│           └── list-accounts.dto.ts
+│
+├── infrastructure/                   # 🔴 CAMADA DE INFRAESTRUTURA
+│   ├── persistence/                  # Implementações de persistência
+│   │   └── prisma/
+│   │       ├── repositories/
+│   │       │   └── prisma-account.repository.ts
+│   │       └── prisma-client.ts
+│   ├── security/                     # Implementações de segurança
+│   │   ├── jwt-token.service.ts     # Implementa TokenService
+│   │   └── bcrypt-password-hasher.service.ts
+│   ├── logger/                      # Sistema de logging
+│   │   ├── console-logger.ts
+│   │   └── logger.interface.ts
+│   └── factories/                    # Factories para injeção de dependências
+│       ├── make-account-repository.ts
+│       ├── make-token-service.ts
+│       └── make-password-hasher.ts
+│
+├── presentation/                     # 🔵 CAMADA DE APRESENTAÇÃO
+│   ├── http/                        # HTTP (Express)
+│   │   ├── controllers/             # Controllers
+│   │   │   ├── auth/
+│   │   │   │   ├── sign-in.controller.ts
+│   │   │   │   └── sign-up.controller.ts
+│   │   │   ├── accounts/
+│   │   │   │   └── list-accounts.controller.ts
+│   │   │   └── health/
+│   │   │       └── health-check.controller.ts
+│   │   ├── middlewares/             # Middlewares HTTP
+│   │   │   └── authentication.middleware.ts
+│   │   ├── routes/                  # Rotas
+│   │   │   ├── auth.routes.ts
+│   │   │   ├── accounts.routes.ts
+│   │   │   ├── health.routes.ts
+│   │   │   └── index.ts
+│   │   ├── validators/              # Validação de entrada (Zod)
+│   │   │   ├── sign-in.validator.ts
+│   │   │   └── sign-up.validator.ts
+│   │   ├── errors/                   # Erros HTTP
+│   │   │   ├── http-error.mapper.ts
+│   │   │   └── constants/error-messages.ts
+│   │   ├── adapters/                # Adaptadores Express
+│   │   │   ├── route.adapter.ts
+│   │   │   └── middleware.adapter.ts
+│   │   └── types/                   # Tipos HTTP
+│   │       └── http.types.ts
+│   ├── server/                      # Configuração do servidor
+│   │   ├── app.ts                   # Express app setup
+│   │   ├── server.ts                # Server startup
+│   │   └── config/                  # Config HTTP
+│   │       ├── cors.config.ts
+│   │       ├── helmet.config.ts
+│   │       ├── rate-limit-config.ts
+│   │       └── env/env.ts
+│   └── factories/                   # Factories de controllers/middlewares
+│       ├── make-sign-in-controller.ts
+│       ├── make-sign-up-controller.ts
+│       └── make-authentication-middleware.ts
+│
+└── shared/                          # 🟣 COMPARTILHADO
+    └── types/                       # Tipos compartilhados
+        └── express.d.ts             # Extensões de tipos Express
+```
+
+### 🎯 Princípios Aplicados
+
+#### Clean Architecture
+
+1. **Domain (Núcleo)** 🟢
+   - ✅ Não depende de NADA
+   - ✅ Contém apenas lógica de negócio pura
+   - ✅ Interfaces de repositórios e serviços
+   - ✅ Entidades e Value Objects
+   - ✅ Erros de domínio
+
+2. **Application** 🟡
+   - ✅ Depende apenas de Domain
+   - ✅ Orquestra casos de uso
+   - ✅ Não conhece HTTP, banco de dados, etc.
+   - ✅ DTOs para transferência de dados
+
+3. **Infrastructure** 🔴
+   - ✅ Implementa interfaces do Domain
+   - ✅ Prisma, JWT, Bcrypt, etc.
+   - ✅ Pode ser trocado sem afetar outras camadas
+   - ✅ Factories para criação de dependências
+
+4. **Presentation** 🔵
+   - ✅ Depende de Application e Domain
+   - ✅ HTTP, CLI, GraphQL, etc.
+   - ✅ Adapta entrada/saída para casos de uso
+   - ✅ Controllers, Routes, Middlewares
+
+#### SOLID Principles
+
+- **S**ingle Responsibility: Cada classe tem uma responsabilidade única
+- **O**pen/Closed: Extensível via interfaces, fechado para modificação
+- **L**iskov Substitution: Implementações substituem interfaces corretamente
+- **I**nterface Segregation: Interfaces específicas e pequenas
+- **D**ependency Inversion: Dependências apontam para abstrações (interfaces)
+
+### 🔄 Fluxo de Dados
+
+```
+HTTP Request
+    ↓
+Presentation Layer (Controllers)
+    ↓
+Application Layer (Use Cases)
+    ↓
+Domain Layer (Business Logic)
+    ↓
+Infrastructure Layer (Implementations)
+    ↓
+Database/External Services
+```
+
+### 📝 Exemplo de Fluxo
+
+1. **Request HTTP** → `Presentation/HTTP/Controllers`
+2. **Controller** valida entrada com `Validators` (Zod)
+3. **Controller** chama `Use Case` da Application Layer
+4. **Use Case** orquestra lógica usando interfaces do Domain
+5. **Infrastructure** implementa as interfaces (Prisma, JWT, etc.)
+6. **Response** retorna através das camadas
+
 ## 🐳 Docker
 
 ### Desenvolvimento
@@ -114,7 +275,7 @@ Para desenvolvimento, use apenas o PostgreSQL:
 pnpm docker:dev
 ```
 
-Isso inicia apenas o PostgreSQL, permitindo que você rode a aplicação localmente.
+Isso inicia apenas o PostgreSQL na porta **5433**, permitindo que você rode a aplicação localmente.
 
 ### Produção
 
@@ -129,53 +290,53 @@ pnpm docker:up
 pnpm docker:down
 ```
 
-## 📁 Estrutura do Projeto
-
-```
-src/
-├── application/          # Camada de aplicação
-│   ├── config/          # Configurações
-│   ├── errors/          # Tratamento de erros
-│   └── use-cases/       # Casos de uso
-├── core/                # Entidades e contratos
-│   ├── entities/        # Entidades de domínio
-│   └── repositories/    # Interfaces de repositórios
-├── infra/               # Infraestrutura
-│   ├── db/             # Banco de dados
-│   │   └── prisma/     # Cliente Prisma
-│   └── logger/         # Sistema de logs
-└── interface/          # Interfaces externas
-    └── http/           # HTTP (controllers, routes, middlewares)
-```
-
 ## 🔒 Segurança
 
 - ✅ Validação de variáveis de ambiente com Zod
 - ✅ JWT com secret mínimo de 32 caracteres
-- ✅ Hash de senhas configurável
+- ✅ Hash de senhas configurável (bcrypt)
 - ✅ CORS configurável
+- ✅ Helmet para headers de segurança
+- ✅ Rate limiting para prevenir ataques
 - ✅ Type safety com TypeScript
+
+## 📚 Endpoints
+
+### Health Check
+
+- `GET /health` - Verifica saúde da aplicação e conexão com banco
+
+### Autenticação
+
+- `POST /auth/sign-up` - Criar nova conta
+- `POST /auth/sign-in` - Fazer login e obter token JWT
+
+### Contas (Protegido)
+
+- `GET /accounts` - Listar contas (requer autenticação)
 
 ## 📝 Próximos Passos
 
-1. Implementar casos de uso (register, authenticate)
-2. Criar controllers e rotas
-3. Implementar middlewares de autenticação
-4. Adicionar testes
-5. Configurar CI/CD
+1. ✅ Implementar casos de uso (register, authenticate)
+2. ✅ Criar controllers e rotas
+3. ✅ Implementar middlewares de autenticação
+4. ⏳ Adicionar testes
+5. ⏳ Configurar CI/CD
 
 ## 📚 Documentação
 
 - [Prisma Docs](https://www.prisma.io/docs)
 - [PostgreSQL Docs](https://www.postgresql.org/docs/)
 - [Docker Docs](https://docs.docker.com/)
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
 
 ## 🤝 Contribuindo
 
 1. Faça fork do projeto
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'feat: Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
 ## 📄 Licença
