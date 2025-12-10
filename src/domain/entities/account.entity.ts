@@ -24,3 +24,8 @@ export interface AccountFilters {
 export interface AccountParams {
   readonly accountId?: string;
 }
+
+export interface UpdateAccountData {
+  readonly name?: string;
+  readonly email?: string;
+}

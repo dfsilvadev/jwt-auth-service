@@ -1,7 +1,8 @@
 import type {
   Account,
   AccountFilters,
-  CreateAccountData
+  CreateAccountData,
+  UpdateAccountData
 } from "../entities/account.entity";
 
 /**
@@ -12,5 +13,9 @@ export interface AccountRepository {
   findByEmail(_email: string): Promise<Account | null>;
   findById(_id: string): Promise<Account | null>;
   create(_data: CreateAccountData): Promise<Account>;
-  findAll(_filters?: AccountFilters): Promise<Account[]>;
+  findAll(_filters: AccountFilters): Promise<Account[]>;
+  update(
+    _accountId: string,
+    _data: Partial<UpdateAccountData>
+  ): Promise<Account>;
 }

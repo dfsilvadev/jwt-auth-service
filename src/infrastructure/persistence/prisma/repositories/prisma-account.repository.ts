@@ -56,14 +56,21 @@ export class PrismaAccountRepository implements AccountRepository {
     return this.toDomain(created);
   }
 
-  private toDomain(data: {
-    id: string;
-    name: string;
-    email: string;
-    passwordHash: string;
-    createdAt: Date;
-    updatedAt: Date;
-  }): Account {
+  async update(
+    accountId: string,
+    data: Partial<{ name: string; email: string }>
+  ): Promise<Account> {
+    const updated = await prismaClient.account.update({
+      where: {
+        id: accountId
+      },
+      data
+    });
+
+    return this.toDomain(updated);
+  }
+
+  private toDomain(data: Account): Account {
     return {
       id: data.id,
       name: data.name,
