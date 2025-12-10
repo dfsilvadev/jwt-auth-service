@@ -1,21 +1,21 @@
 import { ZodError } from "zod";
 
-import {
-  AccountAlreadyExistsError,
-  InvalidCredentialsError
-} from "../../../domain/errors";
+import { AppError } from "../../../domain/errors/app-error";
 import {
   ERROR_CODES,
   ERROR_MESSAGES,
   HTTP_STATUS
 } from "./constants/error-messages";
-import { InvalidTokenError } from "./invalid-token.error";
-import { UnauthorizedError } from "./unauthorized.error";
 
 import type { HttpResponse } from "../types/http.types";
 
 /**
- * Maps domain errors and validation errors to HTTP responses
+ * Maps application errors and validation errors to HTTP responses
+ *
+ * This mapper automatically handles:
+ * - Zod validation errors → 400 BAD_REQUEST
+ * - AppError (all custom errors) → Uses error.status, error.code, error.message
+ * - Unknown errors → 500 INTERNAL_SERVER_ERROR
  */
 export function toHttpResponse(error: unknown): HttpResponse {
   // Zod validation errors
@@ -30,39 +30,16 @@ export function toHttpResponse(error: unknown): HttpResponse {
     };
   }
 
-  // Domain errors
-  if (error instanceof InvalidCredentialsError) {
+  // AppError - all custom errors (domain and HTTP)
+  // All custom errors have status, code, message, and details
+  if (error instanceof AppError) {
     return {
-      statusCode: HTTP_STATUS.UNAUTHORIZED,
-      body: {
-        code: ERROR_CODES.INVALID_CREDENTIALS,
-        message: ERROR_MESSAGES.INVALID_CREDENTIALS,
-        details: null
-      }
-    };
-  }
-
-  if (error instanceof AccountAlreadyExistsError) {
-    return {
-      statusCode: HTTP_STATUS.CONFLICT,
-      body: {
-        code: ERROR_CODES.ACCOUNT_EXISTS,
-        message: ERROR_MESSAGES.ACCOUNT_EXISTS,
-        details: error.details ?? null
-      }
-    };
-  }
-
-  // HTTP errors
-  if (
-    error instanceof InvalidTokenError ||
-    error instanceof UnauthorizedError
-  ) {
-    return {
-      statusCode: error.statusCode,
+      statusCode: error.status,
       body: {
         code: error.code,
-        message: error.message,
+        message: error.expose
+          ? error.message
+          : ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
         details: error.details ?? null
       }
     };

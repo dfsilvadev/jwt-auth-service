@@ -20,3 +20,7 @@ export interface CreateAccountData {
 export interface AccountFilters {
   readonly status?: string;
 }
+
+export interface AccountParams {
+  readonly accountId?: string;
+}

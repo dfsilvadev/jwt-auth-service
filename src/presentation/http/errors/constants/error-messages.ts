@@ -1,15 +1,9 @@
 /**
  * Centralized error codes and messages for HTTP layer
  */
-export const HTTP_STATUS = {
-  BAD_REQUEST: 400,
-  UNAUTHORIZED: 401,
-  FORBIDDEN: 403,
-  NOT_FOUND: 404,
-  CONFLICT: 409,
-  GONE: 410,
-  INTERNAL_SERVER_ERROR: 500
-} as const;
+import { HTTP_STATUS } from "../../../../shared/constants/http-status";
+
+export { HTTP_STATUS };
 
 export const ERROR_CODES = {
   VALIDATION_ERROR: "VALIDATION_ERROR",
@@ -19,6 +13,7 @@ export const ERROR_CODES = {
   INVALID_TOKEN_PAYLOAD: "INVALID_TOKEN_PAYLOAD",
   UNAUTHORIZED: "UNAUTHORIZED",
   ACCOUNT_EXISTS: "ACCOUNT_EXISTS",
+  ACCOUNT_NOT_FOUND: "ACCOUNT_NOT_FOUND",
   INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR"
 } as const;
 
@@ -38,6 +33,8 @@ export const ERROR_MESSAGES = {
     "Your session information is incomplete. Please log in again",
   ACCOUNT_EXISTS:
     "An account with this email address already exists. Please use a different email or try logging in",
+  ACCOUNT_NOT_FOUND:
+    "The specified account does not exist. Please check the account ID and try again",
   INTERNAL_SERVER_ERROR:
     "Something went wrong on our end. Please try again later or contact support if the problem persists"
 } as const;
