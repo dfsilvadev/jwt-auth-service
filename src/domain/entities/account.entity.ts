@@ -7,8 +7,10 @@ export interface Account {
   readonly name: string;
   readonly email: string;
   readonly passwordHash: string;
+  readonly status?: "ACTIVE" | "PENDING" | "SUSPENDED" | "DELETED";
   readonly createdAt: Date;
   readonly updatedAt: Date;
+  readonly deletedAt?: Date | null;
 }
 
 export interface CreateAccountData {

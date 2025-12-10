@@ -36,8 +36,10 @@ export class PrismaAccountRepository implements AccountRepository {
         name: true,
         email: true,
         passwordHash: true,
+        status: true,
         createdAt: true,
-        updatedAt: true
+        updatedAt: true,
+        deletedAt: true
       }
     });
 
@@ -70,14 +72,27 @@ export class PrismaAccountRepository implements AccountRepository {
     return this.toDomain(updated);
   }
 
+  async delete(accountId: string) {
+    await prismaClient.account.update({
+      where: {
+        id: accountId
+      },
+      data: {
+        deletedAt: new Date()
+      }
+    });
+  }
+
   private toDomain(data: Account): Account {
     return {
       id: data.id,
       name: data.name,
       email: data.email,
       passwordHash: data.passwordHash,
+      status: data.status ?? undefined,
       createdAt: data.createdAt,
-      updatedAt: data.updatedAt
+      updatedAt: data.updatedAt,
+      deletedAt: data.deletedAt ?? undefined
     };
   }
 }

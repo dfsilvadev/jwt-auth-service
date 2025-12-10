@@ -18,4 +18,5 @@ export interface AccountRepository {
     _accountId: string,
     _data: Partial<UpdateAccountData>
   ): Promise<Account>;
+  delete(_accountId: string): Promise<void>;
 }
