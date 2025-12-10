@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   postgres:
     image: postgres:16-alpine
@@ -29,14 +27,14 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: auth-jwt-app-dev
     restart: unless-stopped
     ports:
       - "3001:3000"
     environment:
       NODE_ENV: ${NODE_ENV:-development}
-      PORT: 3001
+      PORT: 3000
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-jwt-auth-service}?schema=public
       JWT_SECRET: ${JWT_SECRET:-dev-jwt-secret-minimum-32-characters-long}
       PASSWORD_SALT_ROUNDS: ${PASSWORD_SALT_ROUNDS:-10}
@@ -50,14 +48,18 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-      - /app/build
-    # Comando para desenvolvimento: instala, gera Prisma, migra e roda
+    # Entrypoint customizado para desenvolvimento
+    entrypoint: ["/bin/sh", "-c"]
     command: >
-      sh -c "
-        pnpm install --frozen-lockfile &&
-        pnpm prisma generate &&
-        pnpm prisma migrate dev --name init &&
-        pnpm start:dev
+      "
+      echo '📦 Installing dependencies...' &&
+      pnpm install --frozen-lockfile &&
+      echo '🔧 Generating Prisma Client...' &&
+      pnpm prisma generate &&
+      echo '🔄 Running migrations...' &&
+      pnpm prisma migrate dev --name init &&
+      echo '🚀 Starting development server...' &&
+      pnpm start:dev
       "
 
 volumes:
