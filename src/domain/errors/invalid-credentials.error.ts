@@ -1,7 +1,12 @@
-import { DomainError } from "./domain-error";
+import { HTTP_STATUS } from "../../shared/constants/http-status";
+import { AppError } from "./app-error";
 
-export class InvalidCredentialsError extends DomainError {
+export class InvalidCredentialsError extends AppError {
   constructor() {
-    super("Invalid email or password", "INVALID_CREDENTIALS");
+    super(
+      "Invalid email or password",
+      HTTP_STATUS.UNAUTHORIZED,
+      "INVALID_CREDENTIALS"
+    );
   }
 }

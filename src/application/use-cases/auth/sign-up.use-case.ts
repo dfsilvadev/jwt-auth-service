@@ -19,9 +19,7 @@ export class SignUpUseCase {
       input.email
     );
 
-    if (existingAccount) {
-      throw new AccountAlreadyExistsError(input.email);
-    }
+    if (existingAccount) throw new AccountAlreadyExistsError(input.email);
 
     const passwordHash = await this._passwordHasher.hash(input.password);
 

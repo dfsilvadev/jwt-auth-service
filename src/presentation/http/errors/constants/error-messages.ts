@@ -1,26 +1,10 @@
 /**
- * Centralized error codes and messages for HTTP layer
+ * Centralized error messages for HTTP layer
  */
-export const HTTP_STATUS = {
-  BAD_REQUEST: 400,
-  UNAUTHORIZED: 401,
-  FORBIDDEN: 403,
-  NOT_FOUND: 404,
-  CONFLICT: 409,
-  GONE: 410,
-  INTERNAL_SERVER_ERROR: 500
-} as const;
+import { ERROR_CODES } from "../../../../shared/constants/error-codes";
+import { HTTP_STATUS } from "../../../../shared/constants/http-status";
 
-export const ERROR_CODES = {
-  VALIDATION_ERROR: "VALIDATION_ERROR",
-  INVALID_CREDENTIALS: "INVALID_CREDENTIALS",
-  INVALID_TOKEN: "INVALID_TOKEN",
-  INVALID_TOKEN_FORMAT: "INVALID_TOKEN_FORMAT",
-  INVALID_TOKEN_PAYLOAD: "INVALID_TOKEN_PAYLOAD",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  ACCOUNT_EXISTS: "ACCOUNT_EXISTS",
-  INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR"
-} as const;
+export { ERROR_CODES, HTTP_STATUS };
 
 export const ERROR_MESSAGES = {
   VALIDATION_ERROR:
@@ -38,6 +22,9 @@ export const ERROR_MESSAGES = {
     "Your session information is incomplete. Please log in again",
   ACCOUNT_EXISTS:
     "An account with this email address already exists. Please use a different email or try logging in",
+  ACCOUNT_NOT_FOUND:
+    "The specified account does not exist. Please check the account ID and try again",
   INTERNAL_SERVER_ERROR:
-    "Something went wrong on our end. Please try again later or contact support if the problem persists"
+    "Something went wrong on our end. Please try again later or contact support if the problem persists",
+  FORBIDDEN: "Access to this resource is forbidden"
 } as const;

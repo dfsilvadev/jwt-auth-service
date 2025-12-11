@@ -3,9 +3,11 @@ import { prismaClient } from "../prisma-client";
 import type {
   Account,
   AccountFilters,
+  AccountWithoutPassword,
   CreateAccountData
 } from "../../../../domain/entities/account.entity";
 import type { AccountRepository } from "../../../../domain/repositories/account.repository";
+import { AccountStatus } from "../../../../generated";
 
 /**
  * Prisma Account Repository Implementation
@@ -13,35 +15,47 @@ import type { AccountRepository } from "../../../../domain/repositories/account.
  */
 export class PrismaAccountRepository implements AccountRepository {
   async findByEmail(email: string): Promise<Account | null> {
-    const data = await prismaClient.account.findUnique({
-      where: { email }
+    const data = await prismaClient.account.findFirst({
+      where: {
+        email,
+        deletedAt: null
+      }
     });
 
-    return data ? this.toDomain(data) : null;
+    return data;
   }
 
   async findById(id: string): Promise<Account | null> {
-    const data = await prismaClient.account.findUnique({
-      where: { id }
+    const data = await prismaClient.account.findFirst({
+      where: {
+        id,
+        deletedAt: null
+      }
     });
 
-    return data ? this.toDomain(data) : null;
+    return data;
   }
 
-  async findAll(filters?: AccountFilters): Promise<Account[]> {
+  async findAll(filters?: AccountFilters): Promise<AccountWithoutPassword[]> {
+    const whereClause: Record<string, any> = {
+      deletedAt: null
+    };
+    if (filters?.status) whereClause.status = filters.status as any;
+
     const rows = await prismaClient.account.findMany({
-      where: filters?.status ? { status: filters.status as any } : undefined,
+      where: whereClause,
       select: {
         id: true,
         name: true,
         email: true,
-        passwordHash: true,
+        status: true,
         createdAt: true,
-        updatedAt: true
+        updatedAt: true,
+        deletedAt: true
       }
     });
 
-    return rows.map((row) => this.toDomain(row));
+    return rows;
   }
 
   async create(data: CreateAccountData): Promise<Account> {
@@ -53,24 +67,32 @@ export class PrismaAccountRepository implements AccountRepository {
       }
     });
 
-    return this.toDomain(created);
+    return created;
   }
 
-  private toDomain(data: {
-    id: string;
-    name: string;
-    email: string;
-    passwordHash: string;
-    createdAt: Date;
-    updatedAt: Date;
-  }): Account {
-    return {
-      id: data.id,
-      name: data.name,
-      email: data.email,
-      passwordHash: data.passwordHash,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt
-    };
+  async update(
+    accountId: string,
+    data: Partial<{ name: string; email: string }>
+  ): Promise<Account> {
+    const updated = await prismaClient.account.update({
+      where: {
+        id: accountId
+      },
+      data
+    });
+
+    return updated;
+  }
+
+  async delete(accountId: string) {
+    await prismaClient.account.update({
+      where: {
+        id: accountId
+      },
+      data: {
+        deletedAt: new Date(),
+        status: AccountStatus.DELETED
+      }
+    });
   }
 }

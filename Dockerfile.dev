@@ -1,0 +1,14 @@
+# Development Dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Expose port
+EXPOSE 3000
+
+# Default command (will be overridden by docker-compose)
+CMD ["pnpm", "start:dev"]
+

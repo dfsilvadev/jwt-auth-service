@@ -18,13 +18,7 @@ export class ListAccountsUseCase {
     });
 
     return {
-      accounts: accounts.map((account) => ({
-        id: account.id,
-        name: account.name,
-        email: account.email,
-        createdAt: account.createdAt,
-        updatedAt: account.updatedAt
-      }))
+      accounts
     };
   }
 }
