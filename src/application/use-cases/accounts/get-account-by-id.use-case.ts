@@ -7,6 +7,10 @@ import type {
   GetAccountByIdResult
 } from "../../dtos/accounts/get-account-by-id.dto";
 
+/**
+ * Get Account By ID Use Case
+ * Orchestrates the account retrieval flow by ID
+ */
 export class GetAccountByIdUseCase {
   constructor(private readonly _accountRepository: AccountRepository) {}
 
@@ -21,8 +25,10 @@ export class GetAccountByIdUseCase {
       id: account.id,
       name: account.name,
       email: account.email,
+      status: account.status,
       createdAt: account.createdAt,
-      updatedAt: account.updatedAt
+      updatedAt: account.updatedAt,
+      deletedAt: account.deletedAt
     };
 
     return { account: accountResult };

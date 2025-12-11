@@ -9,6 +9,11 @@ import type {
   UpdateAccountResult
 } from "../../dtos/accounts/update-account.dto";
 
+/**
+ * Update Account Use Case
+ * Orchestrates the account update flow
+ */
+
 export class UpdateAccountUseCase {
   constructor(private readonly _accountRepository: AccountRepository) {}
 
@@ -38,8 +43,10 @@ export class UpdateAccountUseCase {
       id: updated.id,
       name: updated.name,
       email: updated.email,
+      status: updated.status,
       createdAt: updated.createdAt,
-      updatedAt: updated.updatedAt
+      updatedAt: updated.updatedAt,
+      deletedAt: updated.deletedAt
     };
 
     return { account: accountUpdatedResult };

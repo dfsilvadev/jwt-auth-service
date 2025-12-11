@@ -7,6 +7,11 @@ import type { AccountFilters } from "../../../../domain/entities/account.entity"
 import type { Controller } from "../../../../domain/entities/controller.interface";
 import type { HttpRequest, HttpResponse } from "../../types/http.types";
 
+/**
+ * List Accounts Controller
+ * Handles HTTP requests for listing accounts with optional filters
+ */
+
 export class ListAccountsController implements Controller {
   constructor(private readonly _listAccountsUseCase: ListAccountsUseCase) {}
 

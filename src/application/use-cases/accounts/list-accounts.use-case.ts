@@ -14,7 +14,7 @@ export class ListAccountsUseCase {
 
   async execute(input: ListAccountsDTO): Promise<ListAccountsResult> {
     const accounts = await this._accountRepository.findAll({
-      status: input.status
+      status: input.status ?? "ACTIVE"
     });
 
     return {
@@ -22,8 +22,10 @@ export class ListAccountsUseCase {
         id: account.id,
         name: account.name,
         email: account.email,
+        status: account.status,
         createdAt: account.createdAt,
-        updatedAt: account.updatedAt
+        updatedAt: account.updatedAt,
+        deletedAt: account.deletedAt
       }))
     };
   }

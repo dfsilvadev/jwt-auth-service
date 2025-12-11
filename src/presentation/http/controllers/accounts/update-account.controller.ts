@@ -1,6 +1,8 @@
 import { UpdateAccountUseCase } from "../../../../application/use-cases/accounts/update-account.use-case";
+
 import { toHttpResponse, UnauthorizedError } from "../../errors";
 import { HTTP_SUCCESS_STATUS } from "../../utils/constants/success-messages";
+
 import {
   updateAccountBodyValidator,
   updateAccountIdValidator
@@ -8,6 +10,11 @@ import {
 
 import type { Controller } from "../../../../domain/entities/controller.interface";
 import type { HttpRequest, HttpResponse } from "../../types/http.types";
+
+/**
+ * Update Account Controller
+ * Handles HTTP requests for updating an account
+ */
 
 export class UpdateAccountController implements Controller {
   constructor(private readonly _updateAccountUseCase: UpdateAccountUseCase) {}
