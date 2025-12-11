@@ -78,7 +78,8 @@ export class PrismaAccountRepository implements AccountRepository {
         id: accountId
       },
       data: {
-        deletedAt: new Date()
+        deletedAt: new Date(),
+        status: "DELETED"
       }
     });
   }

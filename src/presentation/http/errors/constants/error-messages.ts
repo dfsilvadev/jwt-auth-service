@@ -14,7 +14,8 @@ export const ERROR_CODES = {
   UNAUTHORIZED: "UNAUTHORIZED",
   ACCOUNT_EXISTS: "ACCOUNT_EXISTS",
   ACCOUNT_NOT_FOUND: "ACCOUNT_NOT_FOUND",
-  INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR"
+  INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR",
+  FORBIDDEN: "FORBIDDEN"
 } as const;
 
 export const ERROR_MESSAGES = {
@@ -36,5 +37,6 @@ export const ERROR_MESSAGES = {
   ACCOUNT_NOT_FOUND:
     "The specified account does not exist. Please check the account ID and try again",
   INTERNAL_SERVER_ERROR:
-    "Something went wrong on our end. Please try again later or contact support if the problem persists"
+    "Something went wrong on our end. Please try again later or contact support if the problem persists",
+  FORBIDDEN: "Access to this resource is forbidden"
 } as const;
