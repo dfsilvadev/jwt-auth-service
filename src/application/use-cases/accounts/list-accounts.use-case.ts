@@ -14,19 +14,11 @@ export class ListAccountsUseCase {
 
   async execute(input: ListAccountsDTO): Promise<ListAccountsResult> {
     const accounts = await this._accountRepository.findAll({
-      status: input.status ?? "ACTIVE"
+      status: input.status
     });
 
     return {
-      accounts: accounts.map((account) => ({
-        id: account.id,
-        name: account.name,
-        email: account.email,
-        status: account.status,
-        createdAt: account.createdAt,
-        updatedAt: account.updatedAt,
-        deletedAt: account.deletedAt
-      }))
+      accounts
     };
   }
 }

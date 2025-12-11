@@ -3,6 +3,7 @@ import { prismaClient } from "../prisma-client";
 import type {
   Account,
   AccountFilters,
+  AccountWithoutPassword,
   CreateAccountData
 } from "../../../../domain/entities/account.entity";
 import type { AccountRepository } from "../../../../domain/repositories/account.repository";
@@ -17,7 +18,7 @@ export class PrismaAccountRepository implements AccountRepository {
       where: { email }
     });
 
-    return data ? this.toDomain(data) : null;
+    return data;
   }
 
   async findById(id: string): Promise<Account | null> {
@@ -25,17 +26,16 @@ export class PrismaAccountRepository implements AccountRepository {
       where: { id }
     });
 
-    return data ? this.toDomain(data) : null;
+    return data;
   }
 
-  async findAll(filters?: AccountFilters): Promise<Account[]> {
+  async findAll(filters?: AccountFilters): Promise<AccountWithoutPassword[]> {
     const rows = await prismaClient.account.findMany({
       where: filters?.status ? { status: filters.status as any } : undefined,
       select: {
         id: true,
         name: true,
         email: true,
-        passwordHash: true,
         status: true,
         createdAt: true,
         updatedAt: true,
@@ -43,7 +43,7 @@ export class PrismaAccountRepository implements AccountRepository {
       }
     });
 
-    return rows.map((row) => this.toDomain(row));
+    return rows;
   }
 
   async create(data: CreateAccountData): Promise<Account> {
@@ -55,7 +55,7 @@ export class PrismaAccountRepository implements AccountRepository {
       }
     });
 
-    return this.toDomain(created);
+    return created;
   }
 
   async update(
@@ -69,7 +69,7 @@ export class PrismaAccountRepository implements AccountRepository {
       data
     });
 
-    return this.toDomain(updated);
+    return updated;
   }
 
   async delete(accountId: string) {
@@ -82,18 +82,5 @@ export class PrismaAccountRepository implements AccountRepository {
         status: "DELETED"
       }
     });
-  }
-
-  private toDomain(data: Account): Account {
-    return {
-      id: data.id,
-      name: data.name,
-      email: data.email,
-      passwordHash: data.passwordHash,
-      status: data.status ?? undefined,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
-      deletedAt: data.deletedAt ?? undefined
-    };
   }
 }

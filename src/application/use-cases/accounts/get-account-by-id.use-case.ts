@@ -14,9 +14,7 @@ import type {
 export class GetAccountByIdUseCase {
   constructor(private readonly _accountRepository: AccountRepository) {}
 
-  async execute(
-    input: GetAccountByIdDTO
-  ): Promise<GetAccountByIdResult | null> {
+  async execute(input: GetAccountByIdDTO): Promise<GetAccountByIdResult> {
     const account = await this._accountRepository.findById(input.accountId);
 
     if (!account) throw new AccountDoesNotExistError(input.accountId);

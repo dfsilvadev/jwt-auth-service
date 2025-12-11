@@ -13,6 +13,8 @@ export interface Account {
   readonly deletedAt?: Date | null;
 }
 
+export type AccountWithoutPassword = Omit<Account, "passwordHash">;
+
 export interface CreateAccountData {
   readonly name: string;
   readonly email: string;

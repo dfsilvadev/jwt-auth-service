@@ -13,8 +13,6 @@ export class DeleteAccountUseCase {
   constructor(private readonly _accountRepository: AccountRepository) {}
 
   async execute(input: DeleteAccountDto) {
-    if (!input.actor.id) throw new ForbiddenError();
-
     const account = await this._accountRepository.findById(input.accountId);
     if (!account) throw new AccountDoesNotExistError(input.accountId);
 
