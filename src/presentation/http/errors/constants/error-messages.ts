@@ -1,22 +1,10 @@
 /**
- * Centralized error codes and messages for HTTP layer
+ * Centralized error messages for HTTP layer
  */
+import { ERROR_CODES } from "../../../../shared/constants/error-codes";
 import { HTTP_STATUS } from "../../../../shared/constants/http-status";
 
-export { HTTP_STATUS };
-
-export const ERROR_CODES = {
-  VALIDATION_ERROR: "VALIDATION_ERROR",
-  INVALID_CREDENTIALS: "INVALID_CREDENTIALS",
-  INVALID_TOKEN: "INVALID_TOKEN",
-  INVALID_TOKEN_FORMAT: "INVALID_TOKEN_FORMAT",
-  INVALID_TOKEN_PAYLOAD: "INVALID_TOKEN_PAYLOAD",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  ACCOUNT_EXISTS: "ACCOUNT_EXISTS",
-  ACCOUNT_NOT_FOUND: "ACCOUNT_NOT_FOUND",
-  INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR",
-  FORBIDDEN: "FORBIDDEN"
-} as const;
+export { ERROR_CODES, HTTP_STATUS };
 
 export const ERROR_MESSAGES = {
   VALIDATION_ERROR:

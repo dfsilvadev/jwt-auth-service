@@ -1,4 +1,4 @@
-import { ERROR_CODES } from "../../presentation/http/errors/constants/error-messages";
+import { ERROR_CODES } from "../../shared/constants/error-codes";
 import { HTTP_STATUS } from "../../shared/constants/http-status";
 
 import { AppError } from "./app-error";

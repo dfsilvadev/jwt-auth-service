@@ -1,13 +1,11 @@
 import { type JwtPayload, sign, verify } from "jsonwebtoken";
 
+import { InvalidTokenError } from "../../domain/errors/invalid-token.error";
 import type {
   Token,
   TokenPayload,
   TokenService
 } from "../../domain/services/token.service";
-
-import { ERROR_MESSAGES } from "../../presentation/http/errors/constants/error-messages";
-import { InvalidTokenError } from "../../presentation/http/errors/invalid-token.error";
 
 /**
  * JWT Token Service Implementation
@@ -49,7 +47,9 @@ export class JwtTokenService implements TokenService {
       };
 
       if (!payload.sub || !payload.sessionId) {
-        throw new InvalidTokenError(ERROR_MESSAGES.INVALID_TOKEN_PAYLOAD);
+        throw new InvalidTokenError(
+          "Your session information is incomplete. Please log in again"
+        );
       }
 
       return {
@@ -61,7 +61,7 @@ export class JwtTokenService implements TokenService {
         throw error;
       }
 
-      throw new InvalidTokenError(ERROR_MESSAGES.INVALID_TOKEN);
+      throw new InvalidTokenError();
     }
   }
 }

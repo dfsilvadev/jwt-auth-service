@@ -15,24 +15,35 @@ import { AccountStatus } from "../../../../generated";
  */
 export class PrismaAccountRepository implements AccountRepository {
   async findByEmail(email: string): Promise<Account | null> {
-    const data = await prismaClient.account.findUnique({
-      where: { email }
+    const data = await prismaClient.account.findFirst({
+      where: {
+        email,
+        deletedAt: null
+      }
     });
 
     return data;
   }
 
   async findById(id: string): Promise<Account | null> {
-    const data = await prismaClient.account.findUnique({
-      where: { id }
+    const data = await prismaClient.account.findFirst({
+      where: {
+        id,
+        deletedAt: null
+      }
     });
 
     return data;
   }
 
   async findAll(filters?: AccountFilters): Promise<AccountWithoutPassword[]> {
+    const whereClause: Record<string, any> = {
+      deletedAt: null
+    };
+    if (filters?.status) whereClause.status = filters.status as any;
+
     const rows = await prismaClient.account.findMany({
-      where: filters?.status ? { status: filters.status as any } : undefined,
+      where: whereClause,
       select: {
         id: true,
         name: true,

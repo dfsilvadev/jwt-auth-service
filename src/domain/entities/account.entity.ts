@@ -1,3 +1,21 @@
+import type { AccountStatus as PrismaAccountStatus } from "../../generated";
+
+/**
+ * Account Status Type
+ * Represents the possible states of an account
+ */
+export type AccountStatus = "ACTIVE" | "PENDING" | "SUSPENDED" | "DELETED";
+
+/**
+ * Account Status Constants
+ */
+export const ACCOUNT_STATUS = {
+  ACTIVE: "ACTIVE",
+  PENDING: "PENDING",
+  SUSPENDED: "SUSPENDED",
+  DELETED: "DELETED"
+} as const;
+
 /**
  * Domain Entity: Account
  * Represents a user account in the domain
@@ -7,7 +25,7 @@ export interface Account {
   readonly name: string;
   readonly email: string;
   readonly passwordHash: string;
-  readonly status?: "ACTIVE" | "PENDING" | "SUSPENDED" | "DELETED";
+  readonly status?: PrismaAccountStatus;
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly deletedAt?: Date | null;

@@ -9,8 +9,6 @@ import {
 
 import { deleteAccountValidator } from "../../validators/delete-account.validator";
 
-import { ForbiddenError } from "../../../../domain/errors/forbidden-error";
-
 import type { Controller } from "../../../../domain/entities/controller.interface";
 import type { HttpRequest, HttpResponse } from "../../types/http.types";
 
@@ -24,14 +22,12 @@ export class DeleteAccountController implements Controller {
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
     try {
-      if (!request.metadata?.accountId) throw new ForbiddenError();
-
       const { accountId } = deleteAccountValidator.parse(request.params);
 
       await this._deleteAccountUseCase.execute({
         accountId,
         actor: {
-          id: request.metadata.accountId
+          id: request.metadata?.accountId || ""
         }
       });
 

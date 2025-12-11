@@ -30,5 +30,5 @@ export const SUCCESS_MESSAGES = {
   RESOURCE_RETRIEVED:
     "The requested information has been retrieved successfully",
   RESOURCE_UPDATED: "The information has been updated successfully",
-  RESOURCE_DELETED: "Your account has been deleted successfully"
+  RESOURCE_DELETED: "The resource has been deleted successfully"
 } as const;

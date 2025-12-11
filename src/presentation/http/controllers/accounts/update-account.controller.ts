@@ -1,6 +1,6 @@
 import { UpdateAccountUseCase } from "../../../../application/use-cases/accounts/update-account.use-case";
 
-import { ForbiddenError } from "../../../../domain/errors/forbidden-error";
+import { ForbiddenError } from "../../../../domain/errors";
 import { toHttpResponse } from "../../errors";
 import {
   HTTP_SUCCESS_STATUS,
