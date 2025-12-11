@@ -2,7 +2,7 @@ import { AccountDoesNotExistError } from "../../../domain/errors";
 import { ForbiddenError } from "../../../domain/errors/forbidden-error";
 
 import type { AccountRepository } from "../../../domain/repositories/account.repository";
-import type { DeleteAccountDto } from "../../dtos/accounts/delete-account.dto";
+import type { DeleteAccountDTO } from "../../dtos/accounts/delete-account.dto";
 
 /**
  * Delete Account Use Case
@@ -12,7 +12,7 @@ import type { DeleteAccountDto } from "../../dtos/accounts/delete-account.dto";
 export class DeleteAccountUseCase {
   constructor(private readonly _accountRepository: AccountRepository) {}
 
-  async execute(input: DeleteAccountDto) {
+  async execute(input: DeleteAccountDTO) {
     const account = await this._accountRepository.findById(input.accountId);
     if (!account) throw new AccountDoesNotExistError(input.accountId);
 

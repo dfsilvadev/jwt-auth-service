@@ -2,7 +2,11 @@ import { UpdateAccountUseCase } from "../../../../application/use-cases/accounts
 
 import { ForbiddenError } from "../../../../domain/errors/forbidden-error";
 import { toHttpResponse } from "../../errors";
-import { HTTP_SUCCESS_STATUS } from "../../utils/constants/success-messages";
+import {
+  HTTP_SUCCESS_STATUS,
+  SUCCESS_CODES,
+  SUCCESS_MESSAGES
+} from "../../utils/constants/success-messages";
 
 import {
   updateAccountBodyValidator,
@@ -31,14 +35,17 @@ export class UpdateAccountController implements Controller {
       if (authenticatedAccountId !== accountId)
         throw new ForbiddenError("You can only update your own account");
 
-      const updated = await this._updateAccountUseCase.execute({
+      await this._updateAccountUseCase.execute({
         accountId,
         body: validatedData
       });
 
       return {
         statusCode: HTTP_SUCCESS_STATUS.OK,
-        body: updated
+        body: {
+          code: SUCCESS_CODES.RESOURCE_UPDATED,
+          message: SUCCESS_MESSAGES.RESOURCE_UPDATED
+        }
       };
     } catch (error) {
       return toHttpResponse(error);
