@@ -24,7 +24,7 @@ export class GetAccountByIdController implements Controller {
       const { accountId } = getAccountValidator.parse(request.params);
 
       const result = await this._getAccountByIdUseCase.execute({
-        accountId: accountId
+        accountId
       });
 
       return {

@@ -7,6 +7,7 @@ import type {
   CreateAccountData
 } from "../../../../domain/entities/account.entity";
 import type { AccountRepository } from "../../../../domain/repositories/account.repository";
+import { AccountStatus } from "../../../../generated";
 
 /**
  * Prisma Account Repository Implementation
@@ -79,7 +80,7 @@ export class PrismaAccountRepository implements AccountRepository {
       },
       data: {
         deletedAt: new Date(),
-        status: "DELETED"
+        status: AccountStatus.DELETED
       }
     });
   }

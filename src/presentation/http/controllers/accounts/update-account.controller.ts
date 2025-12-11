@@ -1,6 +1,7 @@
 import { UpdateAccountUseCase } from "../../../../application/use-cases/accounts/update-account.use-case";
 
-import { toHttpResponse, UnauthorizedError } from "../../errors";
+import { ForbiddenError } from "../../../../domain/errors/forbidden-error";
+import { toHttpResponse } from "../../errors";
 import { HTTP_SUCCESS_STATUS } from "../../utils/constants/success-messages";
 
 import {
@@ -28,7 +29,7 @@ export class UpdateAccountController implements Controller {
 
       const authenticatedAccountId = request.metadata?.accountId;
       if (authenticatedAccountId !== accountId)
-        throw new UnauthorizedError("You can only update your own account");
+        throw new ForbiddenError("You can only update your own account");
 
       const updated = await this._updateAccountUseCase.execute({
         accountId,

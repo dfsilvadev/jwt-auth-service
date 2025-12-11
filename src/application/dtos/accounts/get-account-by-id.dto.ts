@@ -7,7 +7,9 @@ export interface GetAccountByIdResult {
     readonly id: string;
     readonly name: string;
     readonly email: string;
+    readonly status?: string;
     readonly createdAt: Date;
     readonly updatedAt: Date;
+    readonly deletedAt?: Date | null;
   };
 }
