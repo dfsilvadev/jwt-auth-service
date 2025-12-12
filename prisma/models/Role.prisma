@@ -1,0 +1,7 @@
+enum Role {
+  ADMIN
+  USER
+  MODERATOR
+
+  @@map("account_roles")
+}

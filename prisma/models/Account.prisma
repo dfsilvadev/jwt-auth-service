@@ -13,10 +13,14 @@ model Account {
   email        String        @unique
   passwordHash String
   status       AccountStatus @default(ACTIVE)
+  role         Role          @default(USER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-
+  // Índices compostos para otimizar queries comuns
+  @@index([email, deletedAt], name: "idx_accounts_email_deleted")
+  @@index([status, deletedAt], name: "idx_accounts_status_deleted")
+  @@index([deletedAt], name: "idx_accounts_deleted")
   @@map("accounts")
 }
