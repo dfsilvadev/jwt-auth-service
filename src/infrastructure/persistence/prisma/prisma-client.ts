@@ -15,10 +15,17 @@ class PrismaClientSingleton {
 
   static getInstance(): PrismaClient {
     if (!this.instance) {
-      // Cria o pool do PostgreSQL
+      // Cria o pool do PostgreSQL com configurações otimizadas
       if (!this.pool) {
         this.pool = new Pool({
-          connectionString: env.DATABASE_URL
+          connectionString: env.DATABASE_URL,
+          // Otimizações de performance
+          max: 20, // Máximo de conexões no pool (padrão: 10)
+          min: 2, // Mínimo de conexões mantidas (padrão: 0)
+          idleTimeoutMillis: 30000, // Fecha conexões idle após 30s (padrão: 10000)
+          connectionTimeoutMillis: 2000, // Timeout para obter conexão (padrão: 0)
+          // Permite reutilizar conexões de forma mais eficiente
+          allowExitOnIdle: false
         });
       }
 
