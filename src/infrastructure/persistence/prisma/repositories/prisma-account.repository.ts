@@ -44,6 +44,7 @@ export class PrismaAccountRepository implements AccountRepository {
         name: true,
         email: true,
         status: true,
+        role: true,
         createdAt: true,
         updatedAt: true
       },

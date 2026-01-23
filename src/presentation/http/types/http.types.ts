@@ -10,7 +10,10 @@ export interface HttpRequest<
   params: TParams;
   query: TQuery;
   metadata?: {
-    accountId?: string;
+    account?: {
+      id: string;
+      role: string;
+    };
     sessionId?: string;
     [key: string]: unknown;
   };

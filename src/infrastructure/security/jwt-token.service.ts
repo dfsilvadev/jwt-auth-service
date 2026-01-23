@@ -1,4 +1,4 @@
-import { type JwtPayload, sign, verify } from "jsonwebtoken";
+import { type JwtPayload, verify as jwtVerify, sign } from "jsonwebtoken";
 
 import { InvalidTokenError } from "../../domain/errors/invalid-token.error";
 import type {
@@ -21,7 +21,10 @@ export class JwtTokenService implements TokenService {
   generate(payload: TokenPayload): Token {
     const token = sign(
       {
-        sub: payload.accountId,
+        account: {
+          sub: payload.accountId,
+          role: payload.role
+        },
         sessionId: payload.sessionId
       },
       this._secret,
@@ -39,27 +42,26 @@ export class JwtTokenService implements TokenService {
 
   verify(token: string): TokenPayload {
     try {
-      const payload = verify(token, this._secret, {
+      const payload = jwtVerify(token, this._secret, {
         issuer: this._issuer
       }) as JwtPayload & {
         sub: string;
         sessionId: string;
       };
 
-      if (!payload.sub || !payload.sessionId) {
+      if (!payload.account.sub || !payload.sessionId) {
         throw new InvalidTokenError(
           "Your session information is incomplete. Please log in again"
         );
       }
 
       return {
-        accountId: payload.sub,
+        accountId: payload.account.sub,
+        role: payload.account.role,
         sessionId: payload.sessionId
       };
     } catch (error) {
-      if (error instanceof InvalidTokenError) {
-        throw error;
-      }
+      if (error instanceof InvalidTokenError) throw error;
 
       throw new InvalidTokenError();
     }

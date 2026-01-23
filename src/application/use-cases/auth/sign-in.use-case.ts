@@ -29,12 +29,11 @@ export class SignInUseCase {
       account.passwordHash
     );
 
-    if (!isPasswordValid) {
-      throw new InvalidCredentialsError();
-    }
+    if (!isPasswordValid) throw new InvalidCredentialsError();
 
     const token = this._tokenService.generate({
       accountId: account.id,
+      role: account.role,
       sessionId: randomUUID()
     });
 

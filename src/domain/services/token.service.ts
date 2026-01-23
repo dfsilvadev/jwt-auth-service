@@ -5,6 +5,7 @@
 export interface TokenPayload {
   readonly accountId: string;
   readonly sessionId: string;
+  readonly role: string;
 }
 
 export interface Token {
