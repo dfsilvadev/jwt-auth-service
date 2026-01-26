@@ -1,7 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 
 import { toHttpResponse } from "../errors";
-import type { Middleware } from "../middlewares/authentication.middleware";
+
+import { Middleware } from "../middlewares/dtos/middlewares.dto";
 
 /**
  * Middleware Adapter
@@ -10,8 +11,13 @@ import type { Middleware } from "../middlewares/authentication.middleware";
 export function middlewareAdapter(middleware: Middleware) {
   return async (request: Request, response: Response, next: NextFunction) => {
     try {
+      const { headers, body, params, query } = request;
       const result = await middleware.handle({
-        headers: request.headers as Record<string, string | string[]>
+        headers: headers as Record<string, string | string[]>,
+        body,
+        params,
+        query,
+        metadata: request.metadata
       });
 
       if (!request.metadata) {

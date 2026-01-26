@@ -22,8 +22,8 @@ export class JwtTokenService implements TokenService {
     const token = sign(
       {
         account: {
-          sub: payload.accountId,
-          role: payload.role
+          sub: payload.account.id,
+          role: payload.account.role
         },
         sessionId: payload.sessionId
       },
@@ -56,8 +56,10 @@ export class JwtTokenService implements TokenService {
       }
 
       return {
-        accountId: payload.account.sub,
-        role: payload.account.role,
+        account: {
+          id: payload.account.sub,
+          role: payload.account.role
+        },
         sessionId: payload.sessionId
       };
     } catch (error) {

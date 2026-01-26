@@ -7,10 +7,7 @@ import type {
   HttpMiddlewareRequest,
   MiddlewareDataResponse
 } from "../types/http.types";
-
-export interface Middleware {
-  handle(_request: HttpMiddlewareRequest): Promise<MiddlewareDataResponse>;
-}
+import { Middleware } from "./dtos/middlewares.dto";
 
 export class AuthenticationMiddleware implements Middleware {
   constructor(private readonly _tokenService: TokenService) {}
@@ -22,11 +19,7 @@ export class AuthenticationMiddleware implements Middleware {
     const payload = this._tokenService.verify(token);
 
     return {
-      data: {
-        accountId: payload.accountId,
-        sessionId: payload.sessionId,
-        role: payload.role
-      }
+      data: { ...payload }
     };
   }
 

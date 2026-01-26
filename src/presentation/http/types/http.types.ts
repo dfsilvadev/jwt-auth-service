@@ -19,13 +19,13 @@ export interface HttpRequest<
   };
 }
 
+export interface HttpMiddlewareRequest extends HttpRequest {
+  headers: Record<string, string | string[]>;
+}
+
 export interface HttpResponse<TBody = unknown> {
   statusCode: number;
   body: TBody | null;
-}
-
-export interface HttpMiddlewareRequest {
-  headers: Record<string, string | string[]>;
 }
 
 export interface MiddlewareDataResponse {

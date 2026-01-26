@@ -3,9 +3,11 @@
  * Domain contract for token generation and verification
  */
 export interface TokenPayload {
-  readonly accountId: string;
+  readonly account: {
+    id: string;
+    role: string;
+  };
   readonly sessionId: string;
-  readonly role: string;
 }
 
 export interface Token {

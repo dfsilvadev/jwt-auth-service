@@ -32,8 +32,10 @@ export class SignInUseCase {
     if (!isPasswordValid) throw new InvalidCredentialsError();
 
     const token = this._tokenService.generate({
-      accountId: account.id,
-      role: account.role,
+      account: {
+        id: account.id,
+        role: account.role
+      },
       sessionId: randomUUID()
     });
 

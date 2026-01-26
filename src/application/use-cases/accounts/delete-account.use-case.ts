@@ -20,9 +20,6 @@ export class DeleteAccountUseCase {
     const account = await this._accountRepository.findById(input.accountId);
     if (!account) throw new AccountDoesNotExistError(input.accountId);
 
-    if (account.id !== input.actor.id)
-      throw new ForbiddenError("Cannot delete another user's account");
-
     await this._accountRepository.delete(input.accountId);
   }
 }

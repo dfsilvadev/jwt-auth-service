@@ -32,6 +32,7 @@ export class UpdateAccountController implements Controller {
       const validatedData = updateAccountBodyValidator.parse(request.body);
 
       const authenticatedAccountId = request.metadata?.account?.id;
+
       if (authenticatedAccountId !== accountId)
         throw new ForbiddenError("You can only update your own account");
 
