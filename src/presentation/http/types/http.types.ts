@@ -10,19 +10,22 @@ export interface HttpRequest<
   params: TParams;
   query: TQuery;
   metadata?: {
-    accountId?: string;
+    account?: {
+      id: string;
+      role: string;
+    };
     sessionId?: string;
     [key: string]: unknown;
   };
 }
 
+export interface HttpMiddlewareRequest extends HttpRequest {
+  headers: Record<string, string | string[]>;
+}
+
 export interface HttpResponse<TBody = unknown> {
   statusCode: number;
   body: TBody | null;
-}
-
-export interface HttpMiddlewareRequest {
-  headers: Record<string, string | string[]>;
 }
 
 export interface MiddlewareDataResponse {

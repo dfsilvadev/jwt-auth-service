@@ -7,7 +7,7 @@ import type {
   CreateAccountData
 } from "../../../../domain/entities/account.entity";
 import type { AccountRepository } from "../../../../domain/repositories/account.repository";
-import { AccountStatus } from "../../../../generated";
+import { AccountStatus, Role } from "../../../../generated";
 
 /**
  * Prisma Account Repository Implementation
@@ -15,31 +15,26 @@ import { AccountStatus } from "../../../../generated";
  */
 export class PrismaAccountRepository implements AccountRepository {
   async findByEmail(email: string): Promise<Account | null> {
-    const data = await prismaClient.account.findFirst({
-      where: {
-        email,
-        deletedAt: null
-      }
+    const data = await prismaClient.account.findUnique({
+      where: { email }
     });
 
-    return data;
+    return data && !data.deletedAt ? data : null;
   }
 
   async findById(id: string): Promise<Account | null> {
-    const data = await prismaClient.account.findFirst({
-      where: {
-        id,
-        deletedAt: null
-      }
+    const data = await prismaClient.account.findUnique({
+      where: { id }
     });
 
-    return data;
+    return data && !data.deletedAt ? data : null;
   }
 
   async findAll(filters?: AccountFilters): Promise<AccountWithoutPassword[]> {
     const whereClause: Record<string, any> = {
       deletedAt: null
     };
+
     if (filters?.status) whereClause.status = filters.status as any;
 
     const rows = await prismaClient.account.findMany({
@@ -49,9 +44,12 @@ export class PrismaAccountRepository implements AccountRepository {
         name: true,
         email: true,
         status: true,
+        role: true,
         createdAt: true,
-        updatedAt: true,
-        deletedAt: true
+        updatedAt: true
+      },
+      orderBy: {
+        createdAt: "desc"
       }
     });
 
@@ -63,7 +61,8 @@ export class PrismaAccountRepository implements AccountRepository {
       data: {
         name: data.name,
         email: data.email,
-        passwordHash: data.passwordHash
+        passwordHash: data.passwordHash,
+        role: Role.USER
       }
     });
 

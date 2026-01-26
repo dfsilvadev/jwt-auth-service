@@ -27,7 +27,7 @@ export class DeleteAccountController implements Controller {
       await this._deleteAccountUseCase.execute({
         accountId,
         actor: {
-          id: request.metadata?.accountId || ""
+          id: request.metadata?.account?.id || ""
         }
       });
 

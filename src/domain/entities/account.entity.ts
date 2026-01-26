@@ -1,4 +1,7 @@
-import type { AccountStatus as PrismaAccountStatus } from "../../generated";
+import type {
+  AccountStatus as PrismaAccountStatus,
+  Role
+} from "../../generated";
 
 /**
  * Account Status Type
@@ -26,6 +29,7 @@ export interface Account {
   readonly email: string;
   readonly passwordHash: string;
   readonly status?: PrismaAccountStatus;
+  readonly role: Role;
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly deletedAt?: Date | null;

@@ -3,7 +3,8 @@ import { SignUpUseCase } from "../../../../application/use-cases/auth/sign-up.us
 import { toHttpResponse } from "../../errors/http-error.mapper";
 import {
   HTTP_SUCCESS_STATUS,
-  SUCCESS_CODES
+  SUCCESS_CODES,
+  SUCCESS_MESSAGES
 } from "../../utils/constants/success-messages";
 import { signUpValidator } from "../../validators/sign-up.validator";
 
@@ -22,7 +23,7 @@ export class SignUpController implements Controller {
         statusCode: HTTP_SUCCESS_STATUS.CREATED,
         body: {
           code: SUCCESS_CODES.ACCOUNT_CREATED,
-          message: "Account created successfully"
+          message: SUCCESS_MESSAGES.ACCOUNT_CREATED
         }
       };
     } catch (error) {
