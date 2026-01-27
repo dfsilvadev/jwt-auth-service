@@ -1,17 +1,17 @@
-model Role {
+model Permission {
   id String @id @default(uuid()) @db.Uuid
 
   // Identificação
   name        String
-  description String
+  code        String  @unique
+  description String?
 
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relações
-  accounts Account[]
 
-  @@index([name])
-  @@map("roles")
+  @@index([code])
+  @@map("permissions")
 }
