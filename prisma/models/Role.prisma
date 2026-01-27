@@ -10,7 +10,8 @@ model Role {
   updatedAt DateTime @updatedAt
 
   // Relações
-  accounts Account[]
+  accounts    Account[]
+  permissions RolePermission[]
 
   @@index([name])
   @@map("roles")

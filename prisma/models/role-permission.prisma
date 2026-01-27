@@ -7,6 +7,8 @@ model RolePermission {
   createdAt DateTime @default(now())
 
   // Relações
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionCode], references: [code], onDelete: Cascade)
 
   @@id([roleId, permissionCode])
   @@index([roleId])
