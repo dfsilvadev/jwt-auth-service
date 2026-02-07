@@ -1,8 +1,15 @@
+enum RoleName {
+  ADMIN
+  USER
+  MODERATOR
+  TESTER
+}
+
 model Role {
   id String @id @default(uuid()) @db.Uuid
 
   // Identificação
-  name        String
+  name        RoleName @default(TESTER)
   description String
 
   // Timestamps
