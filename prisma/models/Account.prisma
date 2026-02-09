@@ -8,15 +8,22 @@ enum AccountStatus {
 }
 
 model Account {
-  id           String        @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
+
+  // Identificação
   name         String
   email        String        @unique
   passwordHash String
   status       AccountStatus @default(ACTIVE)
-  role         Role          @default(USER)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  deletedAt    DateTime?
+  roleId       String        @db.Uuid
+
+  // Timestamps
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Relações
+  role Role @relation(fields: [roleId], references: [id])
 
   // Índices compostos para otimizar queries comuns
   @@index([email, deletedAt], name: "idx_accounts_email_deleted")

@@ -13,7 +13,8 @@ export const signUpValidator = z.object({
     .regex(
       /[^A-Za-z0-9]/,
       "Password must contain at least one special character"
-    )
+    ),
+  roleId: z.uuid().optional().default("USER")
 });
 
 export type SignUpValidator = z.infer<typeof signUpValidator>;

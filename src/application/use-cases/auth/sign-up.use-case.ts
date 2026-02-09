@@ -26,7 +26,8 @@ export class SignUpUseCase {
     await this._accountRepository.create({
       name: input.name,
       email: input.email,
-      passwordHash
+      passwordHash,
+      roleId: input.roleId
     });
   }
 }

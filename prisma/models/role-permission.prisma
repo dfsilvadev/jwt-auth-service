@@ -1,0 +1,17 @@
+model RolePermission {
+  // Vínculo Role <-> Permission
+  roleId         String @db.Uuid
+  permissionCode String
+
+  // Timestamps
+  createdAt DateTime @default(now())
+
+  // Relações
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionCode], references: [code], onDelete: Cascade)
+
+  @@id([roleId, permissionCode])
+  @@index([roleId])
+  @@index([permissionCode])
+  @@map("roles_permissions")
+}
