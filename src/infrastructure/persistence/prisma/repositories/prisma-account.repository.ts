@@ -7,7 +7,7 @@ import type {
   CreateAccountData
 } from "../../../../domain/entities/account.entity";
 import type { AccountRepository } from "../../../../domain/repositories/account.repository";
-import { AccountStatus, Role } from "../../../../generated";
+import { AccountStatus } from "../../../../generated";
 
 /**
  * Prisma Account Repository Implementation
@@ -62,7 +62,7 @@ export class PrismaAccountRepository implements AccountRepository {
         name: data.name,
         email: data.email,
         passwordHash: data.passwordHash,
-        role: Role.USER
+        roleId: data.roleId ?? ""
       }
     });
 

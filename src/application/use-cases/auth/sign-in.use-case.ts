@@ -34,7 +34,7 @@ export class SignInUseCase {
     const token = this._tokenService.generate({
       account: {
         id: account.id,
-        role: account.role
+        role: account.roleId
       },
       sessionId: randomUUID()
     });

@@ -1,3 +1,4 @@
+import { SignUpDTO } from "../../application/dtos/auth/sign-up.dto";
 import type {
   AccountStatus as PrismaAccountStatus,
   Role
@@ -29,17 +30,20 @@ export interface Account {
   readonly email: string;
   readonly passwordHash: string;
   readonly status?: PrismaAccountStatus;
-  readonly role: Role;
+  readonly roleId: string;
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly deletedAt?: Date | null;
 }
 
-export type AccountWithoutPassword = Omit<Account, "passwordHash">;
+export type AccountWithoutPassword = Omit<
+  Account,
+  "passwordHash" | "roleId"
+> & {
+  role: Role;
+};
 
-export interface CreateAccountData {
-  readonly name: string;
-  readonly email: string;
+export interface CreateAccountData extends Omit<SignUpDTO, "password"> {
   readonly passwordHash: string;
 }
 

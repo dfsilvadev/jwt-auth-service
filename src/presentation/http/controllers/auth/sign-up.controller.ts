@@ -8,13 +8,14 @@ import {
 } from "../../utils/constants/success-messages";
 import { signUpValidator } from "../../validators/sign-up.validator";
 
+import type { SignUpDTO } from "../../../../application/dtos/auth/sign-up.dto";
 import type { Controller } from "../../../../domain/entities/controller.interface";
 import type { HttpRequest, HttpResponse } from "../../types/http.types";
 
 export class SignUpController implements Controller {
   constructor(private readonly _signUpUseCase: SignUpUseCase) {}
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
+  async handle(request: HttpRequest<SignUpDTO>): Promise<HttpResponse> {
     try {
       const dto = signUpValidator.parse(request.body);
       await this._signUpUseCase.execute(dto);

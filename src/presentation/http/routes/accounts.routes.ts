@@ -7,7 +7,6 @@ import { makeGetAccountByIdController } from "../../factories/make-get-account-b
 import { makeListAccountsController } from "../../factories/make-list-accounts-controller";
 import { makeUpdateAccountController } from "../../factories/make-update-account-controller";
 
-import { Role } from "../../../generated";
 import { middlewareAdapter } from "../adapters/middleware.adapter";
 import { routeAdapter } from "../adapters/route.adapter";
 
@@ -16,23 +15,25 @@ const router = Router();
 router.get(
   "/",
   middlewareAdapter(makeAuthenticationMiddleware()),
+  middlewareAdapter(makeAuthorizationMiddleware(["users:read"])),
   routeAdapter(makeListAccountsController())
 );
 router.get(
   "/:accountId",
   middlewareAdapter(makeAuthenticationMiddleware()),
+  middlewareAdapter(makeAuthorizationMiddleware(["users:read"])),
   routeAdapter(makeGetAccountByIdController())
 );
 router.patch(
   "/:accountId",
   middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware([Role.ADMIN])),
+  middlewareAdapter(makeAuthorizationMiddleware(["users:write"])),
   routeAdapter(makeUpdateAccountController())
 );
 router.delete(
   "/:accountId",
   middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware([Role.ADMIN])),
+  middlewareAdapter(makeAuthorizationMiddleware(["users:write"])),
   routeAdapter(makeDeleteAccountController())
 );
 
